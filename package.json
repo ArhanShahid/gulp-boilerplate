@@ -1,0 +1,32 @@
+{
+  "name": "web_boilerplate",
+  "title": "web Boilerplate",
+  "version": "1.0.0",
+  "author": "arhanshahid.info",
+  "description": "HTML5 boilerplate using jQuery, SASS/LASS, Gulp build Tasks.",
+  "repository": "https://github.com/ArhanShahid/web-boilerplate.git",
+  "scripts": {
+    "start": "node node_modules/http-server/bin/http-server -o"
+  },
+  "dependencies": {
+    "jquery": "^1.12.4",
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "http-server": "^0.10.0",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.7.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-header": "^1.8.9",
+    "gulp-html-minifier": "^0.1.8",
+    "gulp-imagemin": "^3.3.0",
+    "gulp-less": "^3.3.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.1",
+    "gulp-uglify": "^1.5.4",
+    "gulp-util": "^3.0.8"
+  }
+}
