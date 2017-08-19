@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container-fluid {
+  padding: 0 !important;
+}
+
+[class^="col-"] {
+  padding: 0 !important;
+}
+
+.text_transform_capitalize {
+  text-transform: capitalize;
+}
+
+.padding10px {
+  padding: 10px;
+}
+
+.font-red {
+  color: $brand-danger;
+}
+
+.font-green {
+  color: $brand-success;
+}
+
+.font-info {
+  color: $brand-info;
+}
+
+
+

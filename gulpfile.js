@@ -1,17 +1,44 @@
-const gulp          = require('gulp');
-const concat        = require('gulp-concat');
-const header        = require('gulp-header');
-const rename        = require("gulp-rename");
-const less          = require('gulp-less');
-const sass          = require('gulp-sass');
-const cleanCSS      = require('gulp-clean-css');
-const htmlmin       = require('gulp-html-minifier');
-const imagemin      = require('gulp-imagemin');
-const sourcemaps    = require('gulp-sourcemaps');
-const uglify        = require('gulp-uglify');
-const util          = require('gulp-util');
-const browserSync   = require('browser-sync').create();
-const pkg           = require('./package.json');
+const gulp = require('gulp');
+const concat = require('gulp-concat');
+const header = require('gulp-header');
+const rename = require("gulp-rename");
+const less = require('gulp-less');
+const sass = require('gulp-sass');
+const cleanCSS = require('gulp-clean-css');
+const htmlmin = require('gulp-html-minifier');
+const imagemin = require('gulp-imagemin');
+const sourcemaps = require('gulp-sourcemaps');
+const uglify = require('gulp-uglify');
+const util = require('gulp-util');
+const browserSync = require('browser-sync').create();
+const pkg = require('./package.json');
+
+const paths = {
+    html: {
+        src: ['src/*.html'],
+        dist: 'dist/'
+    },
+    images: {
+        src: ['src/images/*'],
+        dist: 'dist/images'
+    },
+    styles: {
+        src: ['src/sass/style.scss'],
+        src_min: ['dist/styles/style.css'],
+        dist: 'dist/styles'
+    },
+    scripts: {
+        src: [
+            'src/scripts/app.js'
+        ],
+        file: 'app.js',
+        dist: 'dist/scripts'
+    },
+    browserSync: {
+        baseDir: 'dist',
+        port: 4000
+    }
+};
 
 // Set the banner content
 var banner = ['/*!\n',
@@ -21,91 +48,54 @@ var banner = ['/*!\n',
     ''
 ].join('');
 
-// Compile LESS files from /less into /css
-gulp.task('less', function() {
-    return gulp.src(['less/app.less','less/email_verification.less'])
-        .pipe(less())
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(gulp.dest('css'))
-        .pipe(browserSync.reload({
-            stream: true
-        }))
+gulp.task('html', function () {
+    return gulp.src(paths.html.src)
+        .pipe(htmlmin({collapseWhitespace: true}))
+        .pipe(gulp.dest(paths.html.dist));
 });
 
-// Minify compiled CSS
-gulp.task('minify-css', ['less'], function() {
-    return gulp.src(['css/app.css','css/email_verification.css'])
-        .pipe(cleanCSS({ compatibility: 'ie8' }))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('css'))
-        .pipe(browserSync.reload({
-            stream: true
-        }))
+gulp.task('images', function () {
+    return gulp.src(paths.images.src)
+        .pipe(imagemin())
+        .pipe(gulp.dest(paths.images.dist));
 });
 
-// Minify JS
-gulp.task('minify-js', function() {
-    return gulp.src(['js/app.js','js/email_verification.js'])
+gulp.task('sass', function () {
+    return gulp.src(paths.styles.src)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(header(banner, {pkg: pkg}))
+        .pipe(gulp.dest(paths.styles.dist))
+        .pipe(browserSync.reload({stream: true}))
+});
+
+gulp.task('css-minify', ['sass'], function () {
+    return gulp.src(paths.styles.src_min)
+        .pipe(cleanCSS({compatibility: 'ie8'}))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(paths.styles.dist))
+        .pipe(browserSync.reload({stream: true}))
+});
+
+gulp.task('js-minify', function () {
+    return gulp.src(paths.scripts.src)
+        .pipe(concat(paths.scripts.file))
         .pipe(uglify())
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('js'))
+        .pipe(header(banner, {pkg: pkg}))
+        .pipe(rename({suffix: '.min'}))
+        .pipe(gulp.dest(paths.scripts.dist))
         .pipe(browserSync.reload({
             stream: true
         }))
 });
 
-// Copy vendor libraries from /node_modules into /vendor
-gulp.task('copy', function() {
-    gulp.src(['node_modules/bootstrap/dist/**/*', '!**/npm.js', '!**/bootstrap-theme.*', '!**/*.map'])
-        .pipe(gulp.dest('vendor/bootstrap'))
-
-    gulp.src(['node_modules/jquery/dist/jquery.js', 'node_modules/jquery/dist/jquery.min.js'])
-        .pipe(gulp.dest('vendor/jquery'))
-    gulp.src([
-            'node_modules/font-awesome/**',
-            '!node_modules/font-awesome/**/*.map',
-            '!node_modules/font-awesome/.npmignore',
-            '!node_modules/font-awesome/*.txt',
-            '!node_modules/font-awesome/*.md',
-            '!node_modules/font-awesome/*.json'
-        ])
-        .pipe(gulp.dest('vendor/font-awesome'))
-})
-
-// Run everything
-gulp.task('default', ['less', 'minify-css', 'minify-js', 'copy']);
-
-// Configure the browserSync task
-gulp.task('browserSync', function() {
+gulp.task('browserSync', function () {
     browserSync.init({
         server: {
-            baseDir: ''
+            baseDir: paths.browserSync.baseDir
 
         },
-        port: 4000
+        port: paths.browserSync.port
     })
 });
 
-gulp.task('html', function() {
-    return gulp.src('./src/*.html')
-        .pipe(htmlmin({collapseWhitespace: true}))
-        .pipe(gulp.dest('./dist'));
-});
-
-gulp.task('img', function() {
-    return gulp.src('./img/*')
-        .pipe(imagemin())
-        .pipe(gulp.dest('dist/img'));
-});
-
-
-// Dev task with browserSync
-gulp.task('dev', ['browserSync', 'less', 'minify-css', 'minify-js'], function() {
-    gulp.watch('less/*.less', ['less']);
-    gulp.watch('css/*.css', ['minify-css']);
-    gulp.watch('js/*.js', ['minify-js']);
-    // Reloads the browser whenever HTML or JS files change
-    gulp.watch('*.html', browserSync.reload);
-    gulp.watch('js/**/*.js', browserSync.reload);
-});
+gulp.task('default', ['html', 'images', 'css-minify', 'js-minify']);
