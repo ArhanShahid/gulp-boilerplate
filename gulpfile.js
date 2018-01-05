@@ -1,12 +1,11 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
 const gulpCopy = require('gulp-copy');
-const strip = require('gulp-strip-comments');
+const clean = require('gulp-clean');
 const header = require('gulp-header');
 const rename = require("gulp-rename");
 const less = require('gulp-less');
 const sass = require('gulp-sass');
-const cleanCSS = require('gulp-clean-css');
 const htmlmin = require('gulp-html-minifier');
 const imagemin = require('gulp-imagemin');
 const sourcemaps = require('gulp-sourcemaps');
@@ -95,8 +94,9 @@ gulp.task('sass-dev', function () {
 
 gulp.task('sass', function () {
     return gulp.src(paths.prod.styles.src)
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(header(banner, { pkg: pkg }))
+        .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(paths.prod.styles.dist))
         .pipe(browserSync.reload({ stream: true }))
 });
@@ -104,6 +104,7 @@ gulp.task('sass', function () {
 gulp.task('css-minify', ['sass'], function () {
     return gulp.src(paths.prod.styles.src_min)
         .pipe(cleanCSS({ compatibility: 'ie8' }))
+        .pipe(header(banner, { pkg: pkg }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(paths.prod.styles.dist))
         .pipe(browserSync.reload({ stream: true }))
@@ -130,5 +131,4 @@ gulp.task('browser-sync', function () {
 gulp.task('default', ['sass-dev']);
 
 // Prod
-//gulp.task('build', ['html', 'fonts', 'php', 'css-minify', 'images', 'js-minify']);
-gulp.task('build', ['html', 'fonts', 'php', 'css-minify', 'images', 'js-minify']);
+gulp.task('build', ['html', 'fonts', 'php', 'sass', 'images', 'js-minify']);

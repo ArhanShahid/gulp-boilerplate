@@ -1,3 +1,4 @@
 $(function () {
-    console.log('app working.')
+    // App working.
+    console.log('app working.');
 });
