@@ -11,6 +11,7 @@ const imagemin = require('gulp-imagemin');
 const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
 const util = require('gulp-util');
+const replace = require('gulp-replace');
 const browserSync = require('browser-sync').create();
 const pkg = require('./package.json');
 
@@ -40,7 +41,6 @@ const paths = {
         },
         styles: {
             src: ['src/sass/style.scss'],
-            src_min: ['dist/styles/style.css'],
             dist: 'dist/styles'
         },
         scripts: {
@@ -64,6 +64,8 @@ var banner = ['/*!\n',
 
 gulp.task('html', function () {
     return gulp.src(paths.prod.html.src)
+        .pipe(replace('styles/style.css', 'styles/style.min.css'))
+        .pipe(replace('scripts/app.js', 'scripts/app.min.js'))
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest(paths.prod.html.dist));
 });
@@ -94,21 +96,21 @@ gulp.task('sass-dev', function () {
 
 gulp.task('sass', function () {
     return gulp.src(paths.prod.styles.src)
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
         .pipe(header(banner, { pkg: pkg }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(paths.prod.styles.dist))
         .pipe(browserSync.reload({ stream: true }))
 });
 
-gulp.task('css-minify', ['sass'], function () {
-    return gulp.src(paths.prod.styles.src_min)
-        .pipe(cleanCSS({ compatibility: 'ie8' }))
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(paths.prod.styles.dist))
-        .pipe(browserSync.reload({ stream: true }))
-});
+// gulp.task('css-minify', ['sass'], function () {
+//     return gulp.src(paths.prod.styles.src_min)
+//         .pipe(cleanCSS({ compatibility: 'ie8' }))
+//         .pipe(header(banner, { pkg: pkg }))
+//         .pipe(rename({ suffix: '.min' }))
+//         .pipe(gulp.dest(paths.prod.styles.dist))
+//         .pipe(browserSync.reload({ stream: true }))
+// });
 
 gulp.task('js-minify', function () {
     return gulp.src(paths.prod.scripts.src)
