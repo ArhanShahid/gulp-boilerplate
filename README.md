@@ -8,7 +8,7 @@
 
 **2)** Using npm ```npm install```
 
-**4)** Run ```gulp```
+**4)** Run ```gulp build```
 
 **5)** open ```dist/index.html``` in your web browser
 
