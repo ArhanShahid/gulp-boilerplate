@@ -1,9 +1,9 @@
 <?php
 
-if( count($_POST) > 0)
+if(count($_POST) > 0)
 {
-    $mail_address = "admin@acleanernoosa.com.au";
-    $mail_subject = "Email from acleanernoosa.com.au";
+    $mail_address = "yourmail@yourdomain.com";
+    $mail_subject = "Email from yourdomain.com";
 
 	$name = $_POST['name'];
 	$email = $_POST['email'];

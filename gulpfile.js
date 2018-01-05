@@ -22,29 +22,37 @@ const paths = {
             dist: 'src/styles'
         }
     },
-    html: {
-        src: ['src/*.html'],
-        dist: 'dist/'
-    },
-    images: {
-        src: ['src/images/*'],
-        dist: 'dist/images'
-    },
-    styles: {
-        src: ['src/sass/style.scss'],
-        src_min: ['dist/styles/style.css'],
-        dist: 'dist/styles'
-    },
-    scripts: {
-        src: [
-            'src/scripts/app.js'
-        ],
-        file: 'app.js',
-        dist: 'dist/scripts'
-    },
-    browserSync: {
-        baseDir: 'dist',
-        port: 4000
+    prod: {
+        html: {
+            src: ['src/*.html'],
+            dist: 'dist/'
+        },
+        images: {
+            src: ['src/images/*', 'src/images/*/*'],
+            dist: 'dist/images'
+        },
+        fonts: {
+            src: ['src/fonts/*.*'],
+            dist: 'dist/fonts'
+        },
+        php: {
+            src: ['src/php/*.*'],
+            dist: 'dist/php'
+        },
+        styles: {
+            src: ['src/sass/style.scss'],
+            src_min: ['dist/styles/style.css'],
+            dist: 'dist/styles'
+        },
+        scripts: {
+            src: ['src/scripts/app.js'],
+            file: 'app.js',
+            dist: 'dist/scripts'
+        },
+        sync: {
+            baseDir: 'dist',
+            port: 4000
+        }
     }
 };
 
@@ -56,60 +64,65 @@ var banner = ['/*!\n',
 ].join('');
 
 gulp.task('html', function () {
-    return gulp.src(paths.html.src)
+    return gulp.src(paths.prod.html.src)
         .pipe(htmlmin({ collapseWhitespace: true }))
-        .pipe(gulp.dest(paths.html.dist));
+        .pipe(gulp.dest(paths.prod.html.dist));
 });
 
 gulp.task('images', function () {
-    return gulp.src(paths.images.src)
+    return gulp.src(paths.prod.images.src)
         .pipe(imagemin())
-        .pipe(gulp.dest(paths.images.dist));
+        .pipe(gulp.dest(paths.prod.images.dist));
+});
+
+gulp.task('fonts', function () {
+    return gulp.src(paths.prod.fonts.src)
+        .pipe(gulp.dest(paths.prod.fonts.dist));
+});
+
+gulp.task('php', function () {
+    return gulp.src(paths.prod.php.src)
+        .pipe(gulp.dest(paths.prod.php.dist));
 });
 
 gulp.task('sass-dev', function () {
     return gulp.src(paths.dev.styles.src)
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(paths.dev.styles.dist))
-        .pipe(browserSync.reload({stream: true}))
+        .pipe(browserSync.reload({ stream: true }))
 });
 
 
 gulp.task('sass', function () {
-    return gulp.src(paths.styles.src)
+    return gulp.src(paths.prod.styles.src)
         .pipe(sass().on('error', sass.logError))
         .pipe(header(banner, { pkg: pkg }))
-        .pipe(gulp.dest(paths.styles.dist))
+        .pipe(gulp.dest(paths.prod.styles.dist))
         .pipe(browserSync.reload({ stream: true }))
 });
 
 gulp.task('css-minify', ['sass'], function () {
-    return gulp.src(paths.styles.src_min)
+    return gulp.src(paths.prod.styles.src_min)
         .pipe(cleanCSS({ compatibility: 'ie8' }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(paths.styles.dist))
+        .pipe(gulp.dest(paths.prod.styles.dist))
         .pipe(browserSync.reload({ stream: true }))
 });
 
 gulp.task('js-minify', function () {
-    return gulp.src(paths.scripts.src)
-        .pipe(concat(paths.scripts.file))
+    return gulp.src(paths.prod.scripts.src)
+        .pipe(concat(paths.prod.scripts.file))
         .pipe(uglify())
         .pipe(header(banner, { pkg: pkg }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(paths.scripts.dist))
-        .pipe(browserSync.reload({
-            stream: true
-        }))
+        .pipe(gulp.dest(paths.prod.scripts.dist))
+        .pipe(browserSync.reload({ stream: true }))
 });
 
-gulp.task('browserSync', function () {
+gulp.task('browser-sync', function () {
     browserSync.init({
-        server: {
-            baseDir: paths.browserSync.baseDir
-
-        },
-        port: paths.browserSync.port
+        server: { baseDir: paths.sync.baseDir },
+        port: paths.sync.port
     })
 });
 
@@ -117,4 +130,5 @@ gulp.task('browserSync', function () {
 gulp.task('default', ['sass-dev']);
 
 // Prod
-gulp.task('build', ['html', 'images', 'css-minify', 'js-minify']);
+//gulp.task('build', ['html', 'fonts', 'php', 'css-minify', 'images', 'js-minify']);
+gulp.task('build', ['html', 'fonts', 'php', 'css-minify', 'images', 'js-minify']);
