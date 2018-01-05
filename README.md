@@ -11,3 +11,7 @@
 **4)** Run ```gulp```
 
 **5)** open ```dist/index.html``` in your web browser
+
+#### Gulp Task's
+* Development ```gulp```
+* Production ```gulp build```

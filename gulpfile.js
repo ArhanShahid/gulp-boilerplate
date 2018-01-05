@@ -114,7 +114,7 @@ gulp.task('browserSync', function () {
 });
 
 // Dev
-gulp.task('dev', ['sass-dev']);
+gulp.task('default', ['sass-dev']);
 
 // Prod
-gulp.task('default', ['html', 'images', 'css-minify', 'js-minify']);
+gulp.task('build', ['html', 'images', 'css-minify', 'js-minify']);
