@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  padding: 0; }
+
+.container-fluid {
+  padding: 0 !important; }
+
+[class^="col-"] {
+  padding: 0 !important; }
+
+.text_transform_capitalize {
+  text-transform: capitalize; }
+
+.padding10px {
+  padding: 10px; }
+
+.font-red {
+  color: #f86c6b; }
+
+.font-green {
+  color: #4dbd74; }
+
+.font-info {
+  color: #63c2de; }
