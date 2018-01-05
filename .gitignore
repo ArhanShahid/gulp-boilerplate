@@ -1,6 +1,74 @@
-dist
-node_modules
-bower_components
+# Dependencies #
+################
+node_modules/
+bower_components/
+bin/
+tmp/
+
+
+
+# Compiled Output #
+###################
+dist/
+build/
+tmp/
+publish/
+var/
+bundle.js
+
+
+# IDEs & Editors #
+##################
 *.idea
-*.zip
+.project
+.classpath
+*.launch
+.settings/
+
+# Misc #
+########
+/.sass-cache
+/connect.lock
+/coverage/*
+/typings
+
+# E2E #
+#######
+/e2e/*.js
+/e2e/*.map
+
+
+# Packages #
+############
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
 *.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
