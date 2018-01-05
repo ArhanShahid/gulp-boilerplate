@@ -4,7 +4,7 @@
 * [Node JS](https://nodejs.org/ "Nodejs")
 
 #### Getting started
-**1)** This github repository, using ```git clone https://github.com/ArhanShahid/web-boilerplate.git```
+**1)** This github repository, using ```git clone https://github.com/ArhanShahid/web-boilerplate-gulp.git```
 
 **2)** Using npm ```npm install```
 
