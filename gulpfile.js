@@ -83,14 +83,14 @@ gulp.task('php', function () {
         .pipe(gulp.dest(paths.prod.php.dist));
 });
 
-gulp.task('sass-dev', (done) => {
-    gulp.src(paths.dev.styles.src)
+gulp.task('sass-dev', () => {
+    return gulp.src(paths.dev.styles.src)
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(paths.dev.styles.dist))
     // .pipe(browserSync.reload({
     //     stream: true
     // }))
-    done();
+    // done();
 });
 
 
