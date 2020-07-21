@@ -1,16 +1,11 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
-// const gulpCopy = require('gulp-copy');
-// const clean = require('gulp-clean');
 const header = require('gulp-header');
 const rename = require("gulp-rename");
-// const less = require('gulp-less');
 const sass = require('gulp-sass');
 const htmlmin = require('gulp-html-minifier');
 const imagemin = require('gulp-imagemin');
-// const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
-// const util = require('gulp-util');
 const replace = require('gulp-replace');
 const browserSync = require('browser-sync').create();
 const pkg = require('./package.json');
@@ -142,7 +137,6 @@ gulp.task('browser-sync', function () {
 });
 
 // Dev
-// gulp.task('default', ['sass-dev']);
 gulp.task('default', gulp.series('sass-dev'));
 
 // Prod
