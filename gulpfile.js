@@ -1,16 +1,16 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
-const gulpCopy = require('gulp-copy');
-const clean = require('gulp-clean');
+// const gulpCopy = require('gulp-copy');
+// const clean = require('gulp-clean');
 const header = require('gulp-header');
 const rename = require("gulp-rename");
-const less = require('gulp-less');
+// const less = require('gulp-less');
 const sass = require('gulp-sass');
 const htmlmin = require('gulp-html-minifier');
 const imagemin = require('gulp-imagemin');
-const sourcemaps = require('gulp-sourcemaps');
+// const sourcemaps = require('gulp-sourcemaps');
 const uglify = require('gulp-uglify');
-const util = require('gulp-util');
+// const util = require('gulp-util');
 const replace = require('gulp-replace');
 const browserSync = require('browser-sync').create();
 const pkg = require('./package.json');
@@ -66,7 +66,9 @@ gulp.task('html', function () {
     return gulp.src(paths.prod.html.src)
         .pipe(replace('styles/style.css', 'styles/style.min.css'))
         .pipe(replace('scripts/app.js', 'scripts/app.min.js'))
-        .pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(htmlmin({
+            collapseWhitespace: true
+        }))
         .pipe(gulp.dest(paths.prod.html.dist));
 });
 
@@ -86,51 +88,62 @@ gulp.task('php', function () {
         .pipe(gulp.dest(paths.prod.php.dist));
 });
 
-gulp.task('sass-dev', function () {
-    return gulp.src(paths.dev.styles.src)
+gulp.task('sass-dev', (done) => {
+    gulp.src(paths.dev.styles.src)
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(paths.dev.styles.dist))
-        .pipe(browserSync.reload({ stream: true }))
+    // .pipe(browserSync.reload({
+    //     stream: true
+    // }))
+    done();
 });
 
 
 gulp.task('sass', function () {
     return gulp.src(paths.prod.styles.src)
-        .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(rename({ suffix: '.min' }))
+        .pipe(sass({
+            outputStyle: 'compressed'
+        }).on('error', sass.logError))
+        .pipe(header(banner, {
+            pkg: pkg
+        }))
+        .pipe(rename({
+            suffix: '.min'
+        }))
         .pipe(gulp.dest(paths.prod.styles.dist))
-        .pipe(browserSync.reload({ stream: true }))
+        .pipe(browserSync.reload({
+            stream: true
+        }))
 });
-
-// gulp.task('css-minify', ['sass'], function () {
-//     return gulp.src(paths.prod.styles.src_min)
-//         .pipe(cleanCSS({ compatibility: 'ie8' }))
-//         .pipe(header(banner, { pkg: pkg }))
-//         .pipe(rename({ suffix: '.min' }))
-//         .pipe(gulp.dest(paths.prod.styles.dist))
-//         .pipe(browserSync.reload({ stream: true }))
-// });
 
 gulp.task('js-minify', function () {
     return gulp.src(paths.prod.scripts.src)
         .pipe(concat(paths.prod.scripts.file))
         .pipe(uglify())
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(rename({ suffix: '.min' }))
+        .pipe(header(banner, {
+            pkg: pkg
+        }))
+        .pipe(rename({
+            suffix: '.min'
+        }))
         .pipe(gulp.dest(paths.prod.scripts.dist))
-        .pipe(browserSync.reload({ stream: true }))
+        .pipe(browserSync.reload({
+            stream: true
+        }))
 });
 
 gulp.task('browser-sync', function () {
     browserSync.init({
-        server: { baseDir: paths.sync.baseDir },
+        server: {
+            baseDir: paths.sync.baseDir
+        },
         port: paths.sync.port
     })
 });
 
 // Dev
-gulp.task('default', ['sass-dev']);
+// gulp.task('default', ['sass-dev']);
+gulp.task('default', gulp.series('sass-dev'));
 
 // Prod
-gulp.task('build', ['html', 'fonts', 'php', 'sass', 'images', 'js-minify']);
+gulp.task('build', gulp.series('html', 'fonts', 'php', 'sass', 'images', 'js-minify'));

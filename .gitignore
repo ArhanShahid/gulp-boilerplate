@@ -3,9 +3,8 @@
 node_modules/
 bower_components/
 bin/
-tmp/
-
-
+package-lock.json
+yarn.lock
 
 # Compiled Output #
 ###################
@@ -15,6 +14,8 @@ tmp/
 publish/
 var/
 bundle.js
+docs/
+out-tsc/
 
 
 # IDEs & Editors #
@@ -24,6 +25,16 @@ bundle.js
 .classpath
 *.launch
 .settings/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
+.c9/
+*.sublime-workspace
+
+
 
 # Misc #
 ########
@@ -31,12 +42,15 @@ bundle.js
 /connect.lock
 /coverage/*
 /typings
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
 
 # E2E #
 #######
 /e2e/*.js
 /e2e/*.map
-
 
 # Packages #
 ############
