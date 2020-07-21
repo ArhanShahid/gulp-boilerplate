@@ -57,7 +57,7 @@ var banner = ['/*!\n',
     ''
 ].join('');
 
-gulp.task('html', function () {
+gulp.task('html', () => {
     return gulp.src(paths.prod.html.src)
         .pipe(replace('styles/style.css', 'styles/style.min.css'))
         .pipe(replace('scripts/app.js', 'scripts/app.min.js'))
@@ -67,18 +67,18 @@ gulp.task('html', function () {
         .pipe(gulp.dest(paths.prod.html.dist));
 });
 
-gulp.task('images', function () {
+gulp.task('images', () => {
     return gulp.src(paths.prod.images.src)
         .pipe(imagemin())
         .pipe(gulp.dest(paths.prod.images.dist));
 });
 
-gulp.task('fonts', function () {
+gulp.task('fonts', () => {
     return gulp.src(paths.prod.fonts.src)
         .pipe(gulp.dest(paths.prod.fonts.dist));
 });
 
-gulp.task('php', function () {
+gulp.task('php', () => {
     return gulp.src(paths.prod.php.src)
         .pipe(gulp.dest(paths.prod.php.dist));
 });
@@ -94,7 +94,7 @@ gulp.task('sass-dev', () => {
 });
 
 
-gulp.task('sass', function () {
+gulp.task('sass', () => {
     return gulp.src(paths.prod.styles.src)
         .pipe(sass({
             outputStyle: 'compressed'
@@ -111,7 +111,7 @@ gulp.task('sass', function () {
         }))
 });
 
-gulp.task('js-minify', function () {
+gulp.task('js-minify', () => {
     return gulp.src(paths.prod.scripts.src)
         .pipe(concat(paths.prod.scripts.file))
         .pipe(uglify())
@@ -127,7 +127,7 @@ gulp.task('js-minify', function () {
         }))
 });
 
-gulp.task('browser-sync', function () {
+gulp.task('browser-sync', () => {
     browserSync.init({
         server: {
             baseDir: paths.sync.baseDir
